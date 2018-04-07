@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -e
+
+if [ -n "${IF_NETNS}" ]; then
+  unshare -m /bin/sh <<-EOF
+mount --make-rprivate /
+mount --bind /run/network.${IF_NETNS} /run/network
+if (ip netns exec ${IF_NETNS} ifquery --list | grep -qx ${IFACE}); then
+  ip netns exec ${IF_NETNS} ifup ${IFACE}
+fi
+EOF
+fi

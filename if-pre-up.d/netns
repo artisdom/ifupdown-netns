@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -e
+
+if [ -n "${IF_NETNS}" ]
+then
+  # Create netns if it doesn't already exist, and bring up the loopback
+  if ! (ip netns list | grep -qx ${IF_NETNS})
+  then
+    mkdir -p /etc/netns/$IF_NETNS/network/{if-down.d,if-post-down.d,if-pre-up.d,if-up.d}
+    if [ ! -f /etc/netns/$IF_NETNS/network/interfaces ]; then
+      touch /etc/netns/$IF_NETNS/network/interfaces
+    fi
+    mkdir -p /run/network.${IF_NETNS}
+    rm -rf /run/network.${IF_NETNS}/*
+    ip netns add ${IF_NETNS}
+    ip netns exec ${IF_NETNS} ip link set lo up
+  fi
+  ip link set ${IFACE} netns ${IF_NETNS}
+fi
