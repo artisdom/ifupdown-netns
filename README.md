@@ -11,9 +11,11 @@ iface eth1 inet manual
   netns myns
 ```
 
-On invocation of `ifup` it will create the necessary directories under
-`/etc/netns/` and an empty `/etc/netns/<namespace>/network/interfaces` file if
-it doesn't already exist.
-
-If it does and the interface is configured it will invoke `ifup` inside the
-namespace.
+On invocation of `ifup`:
+  * if the namespace doesn't exist it will be created
+  * if the folders `if-down.d`, `if-post-down.d`, `if-pre-up.d` and `if-up.d`
+    under `/etc/netns/<namespace>/network` don't exist, they will be created
+  * if the `/etc/netns/<namespace>/network/interfaces` file doesn't exist a
+    blank one will be created
+  * if it does and the interface is configured the the script will invoke `ifup`
+    for this interface inside the namespace.
