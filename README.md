@@ -25,6 +25,7 @@ On invocation of `ifup`:
 nse () {
   if [ $# -lt 2 ]; then
     echo "Please specify a network namespace and a command"
+    echo "Usage: $0 <namespace> <command>"
     return
   fi
   NS=${1}
@@ -39,6 +40,7 @@ EOF
 nss () {
   if [ $# -ne 1 ]; then
     echo "Please specify a network namespace"
+    echo "Usage: $0 <namespace>"
     return
   fi
   nse $1 zsh -i
