@@ -17,7 +17,7 @@ On invocation of `ifup`:
     under `/etc/netns/<namespace>/network` don't exist, they will be created
   * if the `/etc/netns/<namespace>/network/interfaces` file doesn't exist a
     blank one will be created
-  * if it does and the interface is configured the the script will invoke `ifup`
+  * if it does and the interface is configured, the script will invoke `ifup`
     for this interface inside the namespace.
 
 ## `zsh` function to start a shell in a namespace
