@@ -20,17 +20,27 @@ On invocation of `ifup`:
   * if it does and the interface is configured, the script will invoke `ifup`
     for this interface inside the namespace.
 
-## `zsh` function to start a shell in a namespace
+## `zsh` functions to run commands and start a shell in a namespace
 ```
+nse () {
+  if [ $# -lt 2 ]; then
+    echo "Please specify a network namespace and a command"
+    return
+  fi
+  NS=${1}
+  shift
+  unshare -m /bin/sh <<-EOF
+mount --make-rprivate /
+mount --bind /run/network.${NS} /run/network
+ip netns exec ${NS} ${@}
+EOF
+}
+
 nss () {
-  if [ -z $1 ]; then
+  if [ $# -ne 1 ]; then
     echo "Please specify a network namespace"
     return
   fi
-  unshare -m /bin/sh <<-EOF
-mount --make-rprivate /
-mount --bind /run/network.${1} /run/network
-ip netns exec ${1} zsh -i
-EOF
+  nse $1 zsh -i
 }
 ```
