@@ -11,6 +11,9 @@ then
     if [ ! -f /etc/netns/$IF_NETNS/network/interfaces ]; then
       touch /etc/netns/$IF_NETNS/network/interfaces
     fi
+    if [ ! -f /etc/netns/$IF_NETNS/resolv.conf ]; then
+      touch /etc/netns/$IF_NETNS/resolv.conf
+    fi
     mkdir -p /run/network.${IF_NETNS}
     rm -rf /run/network.${IF_NETNS}/*
     ip netns add ${IF_NETNS}
